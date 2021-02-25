@@ -1,0 +1,1 @@
+Vector* solveCramer(Matrix *, Vector *);

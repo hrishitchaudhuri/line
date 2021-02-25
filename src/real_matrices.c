@@ -4,8 +4,6 @@
 #include"vectors.h"
 #include"real_matrices.h"
 
-#define ERR_CODE -99999
-
 Matrix *createMatrix(Vector **v, int n) {
     //! ENSURE COMPATIBLE VECTORS ONLY. DOES NOT INIT OUT-OF-RANGE VECTORS.
     Matrix *m = (Matrix *) malloc(sizeof(Matrix));
@@ -27,7 +25,7 @@ void mxprintf(Matrix *m) {
     printf("]\n");
 }
 
-Matrix* mtxTranspose(Matrix *m) {
+Matrix* getTranspose(Matrix *m) {
     Matrix *mt = (Matrix *) malloc(sizeof(Matrix));
     mt->cols = m->rows; mt->rows = m->cols;
 
@@ -91,4 +89,89 @@ double getDeterminant(Matrix *m) {
     }
 
     return res;
+}
+
+Matrix* getInverse(Matrix *m) {
+    double det = getDeterminant(m);
+    int det_sign = -1; 
+    double res = 0;
+
+    Matrix *inv = (Matrix *) malloc(sizeof(Matrix));
+    inv->cols = m->cols; 
+    inv->rows = m->rows;
+
+    inv->vtr = (Vector **) malloc(sizeof(Vector *) * inv->rows);
+    for (register int i = 0; i < inv->rows; i++) {
+        inv->vtr[i] = (Vector *) malloc (sizeof(Vector));
+        inv->vtr[i]->dimension = inv->cols;
+        inv->vtr[i]->arr = (double *) malloc (sizeof(double) * inv->cols);
+    }
+
+    Matrix *cf;
+
+    for (register int i = 0; i < m->rows; i++)
+        for (register int j = 0; j < m->cols; j++) {
+            cf = getCofactor(m, i, j);
+            res = det_sign * getDeterminant(cf);
+            inv->vtr[i]->arr[j] = res;
+            det_sign = - det_sign;
+        }
+
+    inv = getTranspose(inv);
+
+    for (register int i = 0; i < inv->rows; i++)
+        for (register int j = 0; j < inv->cols; j++)
+            inv->vtr[i]->arr[j] /= det;
+
+    return inv;
+}
+
+double frobNorm(Matrix *m1, Matrix *m2) {
+    double sum;
+    for (register int i = 0; i < m1->rows; i++)
+        for (register int j = 0; j < m1->cols; j++)
+            sum += m1->vtr[i]->arr[j] * m2->vtr[i]->arr[j];
+    
+    return sum;
+}
+
+Matrix* hadamardProduct(Matrix *m1, Matrix *m2) {
+    Matrix *hdmd = (Matrix *) malloc(sizeof(Matrix));
+    hdmd->cols = m1->cols; 
+    hdmd->rows = m1->rows;
+
+    hdmd->vtr = (Vector **) malloc(sizeof(Vector *) * hdmd->rows);
+    for (register int i = 0; i < hdmd->rows; i++) {
+        hdmd->vtr[i] = (Vector *) malloc (sizeof(Vector));
+        hdmd->vtr[i]->dimension = hdmd->cols;
+        hdmd->vtr[i]->arr = (double *) malloc (sizeof(double) * hdmd->cols);
+    }
+
+    for (register int i = 0; i < m1->rows; i++)
+        for (register int j = 0; j < m1->cols; j++)
+            hdmd->vtr[i]->arr[j] = m1->vtr[i]->arr[j] * m2->vtr[i]->arr[j];
+
+    return hdmd;
+}
+
+Matrix* matrixProduct(Matrix *m1, Matrix *m2) {
+    Matrix *prod = (Matrix *) malloc(sizeof(Matrix));
+    prod->cols = m1->cols; 
+    prod->rows = m1->rows;
+
+    prod->vtr = (Vector **) malloc(sizeof(Vector *) * prod->rows);
+    for (register int i = 0; i < prod->rows; i++) {
+        prod->vtr[i] = (Vector *) malloc (sizeof(Vector));
+        prod->vtr[i]->dimension = prod->cols;
+        prod->vtr[i]->arr = (double *) malloc (sizeof(double) * prod->cols);
+    }
+
+    for (register int i = 0; i < m1->rows; i++)
+        for (register int j = 0; j < m1->cols; j++) {
+            prod->vtr[i]->arr[j] = 0;
+            for (register int k = 0; k < prod->rows; k++) 
+                prod->vtr[i]->arr[j] += m1->vtr[i]->arr[k] * m2->vtr[k]->arr[j]; // lol strassen
+        }
+
+    return prod;
 }

@@ -1,8 +1,8 @@
 #include<stdio.h>
+
 #include "vectors.h"
 #include "real_matrices.h"
-
-#define ERR_CODE -99999
+#include "linear_systems.h"
 
 int main() {
     /*
@@ -35,7 +35,7 @@ int main() {
 
     mxprintf(m);
 
-    Matrix *mt = mtxTranspose(m);
+    Matrix *mt = getTranspose(m);
     mxprintf(mt);
     */
     
