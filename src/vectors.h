@@ -11,4 +11,3 @@ double innerProduct(Vector, Vector);
 double euclidNorm(Vector);
 double taxiNorm(Vector);
 double pNorm(Vector, int);
-double maxNorm(Vector);
