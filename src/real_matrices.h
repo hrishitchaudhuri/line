@@ -5,14 +5,15 @@ typedef struct matrix {
     Vector **vtr;
 } Matrix;
 
-Matrix *initMatrix(int, int);
-Matrix *createMatrix(Vector **, int);
 void mxprintf(Matrix *);
 
-Matrix* getTranspose(Matrix *);
 double getDeterminant(Matrix *);
+double frobNorm(Matrix *, Matrix *);
+
+Matrix *initMatrix(int, int);
+Matrix *createMatrix(Vector **, int);
+Matrix* getTranspose(Matrix *);
 Matrix *getCofactor(Matrix *, int, int);
 Matrix* getInverse(Matrix *);
-double frobNorm(Matrix *, Matrix *);
 Matrix* hadamardProduct(Matrix *, Matrix *);
 Matrix* matrixProduct(Matrix *, Matrix *);

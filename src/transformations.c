@@ -53,3 +53,26 @@ Vector *get2DProjection(Vector *v, double rads) {
 
     return proj;
 }
+
+Vector *get2DShear(Vector *v, int direction, double shear_factor) {
+    if (v->dimension != 2) {
+        printf("\033[0;31m [ERR] Shear map only allowed in R2 space.\n \033[0m");
+        exit(ERR_CODE);
+    }
+
+    Vector *sh = (Vector *) malloc(sizeof(Vector));
+    sh->dimension = 2;
+    sh->arr = (double *) malloc(sizeof(double) * sh->dimension);
+
+    if (direction) {
+        sh->arr[0] = shear_factor * v->arr[1] + v->arr[0];
+        sh->arr[1] = v->arr[1];
+    }
+
+    else {
+        sh->arr[0] = v->arr[0];
+        sh->arr[1] = shear_factor * v->arr[0] + v->arr[1];
+    }
+
+    return sh;
+}
