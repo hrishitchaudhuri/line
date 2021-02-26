@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.lisp": "lisp",
-        "vectors.h": "c"
-    }
-}
