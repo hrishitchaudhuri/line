@@ -5,6 +5,7 @@ typedef struct matrix {
     Vector **vtr;
 } Matrix;
 
+Matrix *initMatrix(int, int);
 Matrix *createMatrix(Vector **, int);
 void mxprintf(Matrix *);
 
