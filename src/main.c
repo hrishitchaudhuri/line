@@ -82,8 +82,6 @@ int main() {
     Matrix *hd = hadamardProduct(m1, m2);
     mxprintf(hd);
 
-    */
-
    double a[4] = {2, 3, 4, 1};
    Vector* p = createVector(a, 4);
 
@@ -93,5 +91,56 @@ int main() {
    Vector* sl = diffPolynomial(p);
    vctprintf(sl);
 
-    return 0;
+   double a[4] = {2, 0, 2, 0.6};
+   double b[4] = {3, 3, 4, -2};
+   double c[4] = {5, 5, 4, 2};
+   double d[4] = {-1, -2, 3.4, -1};
+
+   Vector *v1 = createVector(a, 4);
+   Vector *v2 = createVector(b, 4);
+   Vector *v3 = createVector(c, 4);
+   Vector *v4 = createVector(d, 4);
+
+   Vector *v[4] = {v1, v2, v3, v4};
+
+   Matrix *m = createMatrix(v, 4);
+   Matrix *l = initMatrix(4, 4);
+   Matrix *u = initMatrix(4, 4);
+   Vector *p = initVector(4);
+
+   decomposeLUP(m, l, u, p);
+   mxprintf(l); mxprintf(u);
+   vctprintf(p);
+
+   double a1[3] = {1, 2, 0};
+   double a2[3] = {3, 4, 4};
+   double a3[3] = {5, 6, 3};
+
+   double b[3] = {3, 7, 8};
+
+   Vector *v[3] = {createVector(a1, 3), createVector(a2, 3), createVector(a3, 3)};
+   Matrix *A = createMatrix(v, 3);
+
+   Vector *B = createVector(b, 3);
+
+   Vector *sol = solveLUP(A, B);
+   vctprintf(sol);
+
+   */
+
+   double a1[4] = {2, 3, 1, 5};
+   double a2[4] = {6, 13, 5, 19};
+   double a3[4] = {2, 19, 10, 23};
+   double a4[4] = {4, 10, 11, 31};
+
+   Vector *v[4] = {createVector(a1, 4), createVector(a2, 4), createVector(a3, 4), createVector(a4, 4)};
+   Matrix *A = createMatrix(v, 4);
+   Matrix *L = initMatrix(4, 4);
+   Matrix *U = initMatrix(4, 4);
+
+   decomposeLU(A, L, U);
+
+   mxprintf(L); mxprintf(U);
+
+   return 0;
 }

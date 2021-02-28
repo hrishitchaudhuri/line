@@ -3,6 +3,7 @@ typedef struct vector {
     double *arr;
 } Vector;
 
+Vector *initVector(int);
 Vector *createVector(double *, int);
 void scaleVector(Vector *, double);
 void vctprintf(Vector *);

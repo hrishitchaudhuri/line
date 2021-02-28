@@ -6,8 +6,15 @@
 
 #define ERR_CODE -99999
 
+Vector *initVector(int n) {
+    Vector* v = (Vector *) malloc(sizeof(Vector));
+    v->arr = (double *) malloc(sizeof(double) * n);
+    v->dimension = n;
+
+    return v;
+}
+
 Vector *createVector(double *a, int n) {
-    
     Vector* v = (Vector *) malloc(sizeof(Vector));
     v->arr = (double *) malloc(sizeof(double) * n);
 
