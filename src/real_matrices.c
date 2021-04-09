@@ -10,23 +10,25 @@ Matrix *initMatrix(int rw, int cl) {
     m->rows = rw;
 
     m->vtr = (Vector **) malloc(sizeof(Vector *) * m->rows);
-    for (register int i = 0; i < m->rows; i++) {
-        m->vtr[i] = (Vector *) malloc (sizeof(Vector));
-        m->vtr[i]->dimension = m->cols;
-        m->vtr[i]->arr = (double *) malloc (sizeof(double) * m->cols);
-    }
+    for (register int i = 0; i < m->rows; i++)
+        m->vtr[i] = initVector(m->cols);
 
     return m;
 }
 
 Matrix *createMatrix(Vector **v, int n) {
-    //! ENSURE COMPATIBLE VECTORS ONLY. DOES NOT INIT OUT-OF-RANGE VECTORS.
     Matrix *m = (Matrix *) malloc(sizeof(Matrix));
-    m->vtr = (Vector **) malloc(sizeof(Vector *) * n);
-
-    m->vtr = v;
     m->rows = n;
     m->cols = v[0]->dimension;
+
+    m->vtr = (Vector **) malloc(sizeof(Vector *) * m->rows);
+    for (register int i = 0; i < m->rows; i++)
+        m->vtr[i] = initVector(m->cols);
+
+
+    for (register int i = 0; i < m->rows; i++)
+        for (register int j = 0; j < m->cols; j++)
+            m->vtr[i]->arr[j] = v[i]->arr[j];
 
     return m;
 }
@@ -84,6 +86,8 @@ double getDeterminant(Matrix *m) {
         cf = getCofactor(m, 0, i);
         res = res + det_sign * m->vtr[0]->arr[i] * getDeterminant(cf);
         det_sign = -det_sign; 
+
+        destroyMatrix(cf);
     }
 
     return res;
@@ -104,19 +108,23 @@ Matrix* getInverse(Matrix *m) {
             res = det_sign * getDeterminant(cf);
             inv->vtr[i]->arr[j] = res;
             det_sign = - det_sign;
+
+            destroyMatrix(cf);
         }
 
-    inv = getTranspose(inv);
+    Matrix *inv_t = getTranspose(inv);
 
-    for (register int i = 0; i < inv->rows; i++)
-        for (register int j = 0; j < inv->cols; j++)
-            inv->vtr[i]->arr[j] /= det;
+    for (register int i = 0; i < inv_t->rows; i++)
+        for (register int j = 0; j < inv_t->cols; j++)
+            inv_t->vtr[i]->arr[j] /= det;
 
-    return inv;
+    destroyMatrix(inv);
+
+    return inv_t;
 }
 
 double frobNorm(Matrix *m1, Matrix *m2) {
-    double sum;
+    double sum = 0;
     for (register int i = 0; i < m1->rows; i++)
         for (register int j = 0; j < m1->cols; j++)
             sum += m1->vtr[i]->arr[j] * m2->vtr[i]->arr[j];
@@ -135,6 +143,11 @@ Matrix* hadamardProduct(Matrix *m1, Matrix *m2) {
 }
 
 Matrix* matrixProduct(Matrix *m1, Matrix *m2) {
+    if (m1->cols != m2->rows) {
+        printf("\033[0;31m>> [ERR] Incompatible dimensions. \n \033[0m");
+        exit(ERR_CODE);
+    }
+
     Matrix *prod = initMatrix(m1->rows, m2->cols);
 
     for (register int i = 0; i < m1->rows; i++)
@@ -145,4 +158,11 @@ Matrix* matrixProduct(Matrix *m1, Matrix *m2) {
         }
 
     return prod;
+}
+
+void destroyMatrix(Matrix *m) {
+    for (register int i = 0; i < m->rows; i++)
+        destroyVector(m->vtr[i]);
+    free(m->vtr);
+    free(m);
 }

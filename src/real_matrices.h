@@ -17,3 +17,5 @@ Matrix *getCofactor(Matrix *, int, int);
 Matrix* getInverse(Matrix *);
 Matrix* hadamardProduct(Matrix *, Matrix *);
 Matrix* matrixProduct(Matrix *, Matrix *);
+
+void destroyMatrix(Matrix *);

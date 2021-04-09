@@ -155,7 +155,6 @@ Vector *solveLUP(Matrix *A, Vector *b) {
     decomposeLUP(A, L, U, P);
 
     Vector *y = fsub(P, b, L);
-    vctprintf(y);
     Vector *x = bsub(U, y);
     
     return x;
