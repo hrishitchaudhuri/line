@@ -42,6 +42,7 @@ int main() {
     printf("DET: %.3f\n", getDeterminant(m));
 
     Matrix *mi = getInverse(m);
+
     mxprintf(mi);
 
     Matrix *prod = matrixProduct(m, mi);
@@ -53,7 +54,6 @@ int main() {
 
     destroyMatrix(m);
     destroyMatrix(mi);
-    destroyMatrix(prod);
 
     double a2[3] = {3, 4, 5};
     double b2[3] = {9, 1, 2};
