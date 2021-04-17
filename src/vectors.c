@@ -7,6 +7,10 @@
 #define ERR_CODE -99999
 
 Vector *initVector(int n) {
+    /**
+     \brief Initialize pointer to a Vector.
+     */
+     
     Vector* v = (Vector *) malloc(sizeof(Vector));
     v->arr = (double *) malloc(sizeof(double) * n);
     v->dimension = n;
@@ -15,6 +19,10 @@ Vector *initVector(int n) {
 }
 
 Vector *createVector(double *a, int n) {
+    /**
+     \brief Create Vector from array of doubles.
+     */
+    
     Vector* v = (Vector *) malloc(sizeof(Vector));
     v->arr = (double *) malloc(sizeof(double) * n);
 
@@ -27,6 +35,10 @@ Vector *createVector(double *a, int n) {
 }
 
 Vector *scaleVector(Vector *v, double sf) {
+    /**
+     \brief Scale Vector by some scaling factor (sf).
+     */
+    
     Vector *v_sc = initVector(v->dimension);
     for (register int i = 0; i < v->dimension; i++)
         v_sc->arr[i] = v->arr[i] / sf;
@@ -35,6 +47,10 @@ Vector *scaleVector(Vector *v, double sf) {
 }
 
 void vctprintf(Vector *v) {
+    /**
+     \brief Print Vector onto STDOUT.
+     */
+    
     printf("<");
     for (register int i = 0; i < (v->dimension - 1); i++) {
         printf(" %.3f,", v->arr[i]);
@@ -43,6 +59,10 @@ void vctprintf(Vector *v) {
 }
 
 double innerProduct(Vector *v1, Vector *v2) {
+    /**
+     \brief Return inner product of two Vectors.
+     */
+    
     if (v1->dimension != v2->dimension) {
         printf("\033[0;31m [ERR] Incompatible dimensions. \n \033[0m");
         return ERR_CODE;
@@ -56,10 +76,18 @@ double innerProduct(Vector *v1, Vector *v2) {
 }
 
 double euclidNorm(Vector *v) {
+    /**
+     \brief Return Euclidean distance (Euclidean/L2 norm) of a Vector.
+     */
+    
     return pow(innerProduct(v, v), 0.5);
 }
 
 double taxiNorm(Vector *v) {
+    /**
+     \brief Return taxicab/L1 norm of a Vector.
+     */
+    
     double manhattan = 0;
     for (register int i = 0; i < v->dimension; i++) 
         manhattan = manhattan + ((v->arr[i] < 0) ? (- v->arr[i]) : (v->arr[i]));
@@ -68,6 +96,10 @@ double taxiNorm(Vector *v) {
 }
 
 double pNorm(Vector *v, int p) {
+    /**
+     \brief Return Lp norm of a Vector.
+     */
+    
     double lp = 0;
     for (register int i = 0; i < v->dimension; i++)
         lp = lp + ((v->arr[i] < 0) ? pow((- v->arr[i]), p) : pow(v->arr[i], p));
@@ -76,6 +108,10 @@ double pNorm(Vector *v, int p) {
 }
 
 double maxNorm(Vector *v) {
+    /**
+     \brief Return max element of a Vector.
+     */
+    
     double max = v->arr[0];
     for (register int i = 1; i < v->dimension; i++)
         max = (max < v->arr[i]) ? v->arr[i] : max;
@@ -84,6 +120,9 @@ double maxNorm(Vector *v) {
 }
 
 void destroyVector(Vector *v) {
+    /**
+     \brief Free dynamically allocated space (Vector destructor).
+     */
     free(v->arr);
     free(v);
 }
